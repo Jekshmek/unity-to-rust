@@ -14,7 +14,6 @@ public class ForGameObject : MonoBehaviour
 
     [DllImport("unity_rust")]
     private static extern int triple_input(int x);
-    
     //------------------------------------------------------------------------------------------
 
     // Работа с методами
@@ -31,7 +30,6 @@ public class ForGameObject : MonoBehaviour
     Функция, действующая как прокси для каждого метода объекта, который мы хотим вызвать ,
     каждая функция, выступающая в качестве прокси, получает указатель в качестве первого аргумента
     */
-    
     [DllImport("ptr_counter")]
     unsafe private static extern int* createCounter(int val);
    
@@ -46,7 +44,6 @@ public class ForGameObject : MonoBehaviour
 
     [DllImport("ptr_counter")]
     unsafe private static extern void destroyCounter(int* ptr);
-    
     //------------------------------------------------------------------------------------------
 
     // Вариант с передачей структуры 
@@ -56,15 +53,14 @@ public class ForGameObject : MonoBehaviour
        посылаем указатель в rust, он преобразуется в структуру Counter,
        а в C# указатель преобразуется в тип int
      */
-    public struct Args
+     public struct Args
      {
             public int init;
             public int by;
-      };
+     };
   
      public Args obj_args;
-        
-    
+     
     [DllImport("struct_counter")]
     unsafe private static extern int* createCounterStruct(Args args);
 
@@ -95,7 +91,7 @@ public class ForGameObject : MonoBehaviour
      «просмотр» массива, который мы суммируем в нашем счетчике:
     
      Из основного языка мы можем просто указать тип массива в качестве аргумента
-*/
+     */
      [DllImport("array_counter")]
      unsafe private static extern int* createCounterArray(int val);
 
@@ -110,8 +106,6 @@ public class ForGameObject : MonoBehaviour
      
      [DllImport("array_counter")]   
      unsafe private static extern void destroyCounterArray(int* ptr);
-         
-         
      //------------------------------------------------------------------------------------------
      
     // Start is called before the first frame update
@@ -182,8 +176,6 @@ public class ForGameObject : MonoBehaviour
             Debug.Log(val);//8
             destroyCounterArray(ptr);
             
-            
-            
             /*
              // #2
              // fixed 
@@ -210,14 +202,6 @@ public class ForGameObject : MonoBehaviour
             */
         }
     }
-    
-    void Update()
-    {
- 
-    }
-    
-    void run()
-    {
-    }
-    
+    void Update() {}
+    void run() {}
 }
