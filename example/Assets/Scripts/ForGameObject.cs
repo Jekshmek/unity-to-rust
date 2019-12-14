@@ -161,13 +161,44 @@ public class ForGameObject : MonoBehaviour
         // Вариант счетчика через указатели и массив
         unsafe
         {
-            int[] iArray = new int[3] { 1, 1, 2  };
+           //#1
+            // stackalloc -  выделить память под массив в стеке
+            const int bys_len = 3;
+            int* bys_ptr = stackalloc int[bys_len]{1,1,2}; // выделяем память в стеке под bys_len объектов int
+            //int* bys_ptr = stackalloc int[bys_len];
+            //int* p = bys_ptr;//Для манипуляций с массивом создаем указатель p, который указывает на первый элемент массива, в котором всего bys_len элементов
+            //*(p++)= 1; // присваиваем первой ячейке значение 1 и
+            //*(p++)= 1;
+            //*(p++)= 2;
+            
+            int* ptr = createCounterArray(4);
+            int val = getCounterValueArray(ptr);
+            Debug.Log(val);//4
+            val = incrementCounterByArray(ptr, bys_ptr, bys_len);
+            Debug.Log(val);//8
+            val = incrementCounterByArray(ptr, bys_ptr, bys_len);
+            Debug.Log(val);//12
+            val = decrementCounterByArray(ptr, bys_ptr, bys_len);
+            Debug.Log(val);//8
+            destroyCounterArray(ptr);
+            
+            
+            
+            /*
+             // #2
+             // fixed 
+              int[] iArray = new int[3] { 1, 1, 2  };
+              // fixed используется когда данные за указателем будут размещены в куче и что бы сборщик мусора не почистил 
+              // Чтобы фиксировать на все время работы указатели на объекты классов используется оператор fixed.
             fixed (int* bys_ptr = iArray)
             {
+                //int[] nums2 = new int[3] { 1, 1, 2  };
+                //int[] bys_ptr = &nums2;
+                
                 int* ptr = createCounterArray(4);
                 int val = getCounterValueArray(ptr);
                 Debug.Log(val);//4
-                // К текущему значению val добавить все значения массива
+                // К текущему значению val(который) добавить все значения массива
                 val = incrementCounterByArray(ptr, bys_ptr, iArray.Length);
                 Debug.Log(val);//8
                 val = incrementCounterByArray(ptr, bys_ptr, iArray.Length);
@@ -175,7 +206,8 @@ public class ForGameObject : MonoBehaviour
                 val = decrementCounterByArray(ptr, bys_ptr, iArray.Length);
                 Debug.Log(val);//8
                 destroyCounterArray(ptr);
-            }
+            } //После завершения блока fixed закрепление с переменных снимается, и они могут быть подвержены сборке мусора.
+            */
         }
     }
     
